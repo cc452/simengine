@@ -7,7 +7,8 @@
 export NEO4J_USR="simengine"
 export NEO4J_PSW="simengine"
 
-sudo neo4j start
+# sudo neo4j start
+sudo systemctl start neo4j
 nohup redis-server & 
 
 sleep 4

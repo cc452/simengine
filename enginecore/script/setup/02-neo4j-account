@@ -6,12 +6,14 @@
 # CTyler 2018-06-06
 
 echo "===== $(basename $0)"
-sudo rm -f /var/lib/neo4j/data/dbms/auth
-sudo neo4j stop
-sudo neo4j start
+#sudo rm -f /var/lib/neo4j/data/dbms/auth
+#sudo neo4j stop
+#sudo neo4j start
+sudo systemctl start neo4j
 sleep 4
 echo "CALL dbms.changePassword('neo4j-simengine'); CALL dbms.security.createUser('simengine', 'simengine', false);"|sudo cypher-shell -u neo4j -p neo4j
 STATUS=$?
-sudo neo4j stop
+#sudo neo4j stop
+sudo systemctl stop neo4j
 exit $STATUS
 
