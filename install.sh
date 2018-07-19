@@ -25,7 +25,7 @@ firewall_rules () {
 	iptables -I INPUT 2 -p udp --dport 8000 -m comment --comment "SimEngine WebSocket" -j ACCEPT
 	iptables -I INPUT 2 -p tcp --dport 9000 -m comment --comment "SimEngine FrontEnd" -j ACCEPT
 	iptables -I INPUT 2 -p udp --dport 9000 -m comment --comment "SimEngine FrontEnd" -j ACCEPT
-	iptables-save
+	/sbin/service iptables save
 }
 
 install_utilities () {
