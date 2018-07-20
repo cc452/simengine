@@ -18,7 +18,7 @@ def configure_env():
     os.environ['SIMENGINE_SNMP_SHA'] = os.environ.get(
         'SIMENGINE_SNMP_SHA', 
 #        str(os.popen('redis-cli script load "$(cat script/snmppub.lua)"').read())
-        str(os.popen('redis-cli script load "$(cat /usr/share/simengine/script/snmppub.lua)"').read())
+        str(os.popen('redis-cli script load "$(cat /usr/share/simengine/enginecore/script/snmppub.lua)"').read())
     )
 
 def run():
