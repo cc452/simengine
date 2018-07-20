@@ -21,11 +21,14 @@ replace_firewalld () {
 }
 
 firewall_rules () {
+	echo "-- Applying Firewall Rules --"
+	echo ""
 	iptables -I INPUT 2 -p tcp --dport 8000 -m comment --comment "SimEngine WebSocket" -j ACCEPT
 	iptables -I INPUT 2 -p udp --dport 8000 -m comment --comment "SimEngine WebSocket" -j ACCEPT
 	iptables -I INPUT 2 -p tcp --dport 9000 -m comment --comment "SimEngine FrontEnd" -j ACCEPT
 	iptables -I INPUT 2 -p udp --dport 9000 -m comment --comment "SimEngine FrontEnd" -j ACCEPT
 	/sbin/service iptables save
+	echo ""
 }
 
 install_utilities () {
@@ -68,36 +71,53 @@ clone_repo () {
 }
 
 neo4j_repoadd () {
+	echo "-- Adding Neo4j Repository --"
+	echo ""
 	rpm --import http://debian.neo4j.org/neotechnology.gpg.key
 	echo "[neo4j]" > /etc/yum.repos.d/neo4j.repo
 	echo "name=Neo4j RPM Repository" >> /etc/yum.repos.d/neo4j.repo
 	echo "baseurl=http://yum.neo4j.org/stable" >> /etc/yum.repos.d/neo4j.repo
 	echo "enabled=1" >> /etc/yum.repos.d/neo4j.repo
 	echo "gpgcheck=1" >> /etc/yum.repos.d/neo4j.repo
+	echo ""
 }
 
 database_install () {
+	echo "-- Installing Databases --"
+	echo ""
 	dnf -y install redis neo4j python3-libvirt
 	python3 -m pip install -r /usr/share/simengine/enginecore/requirements.txt
 	pip install redis
 	pip install snmpsim
+	rm -rf /var/lib/neo4j/data/dbms/auth
+	echo ""
 }
 
 start_db () {
+	echo "-- Starting Database Daemons --"
+	echo ""
 	systemctl enable neo4j --now
 	systemctl enable redis --now
+	echo ""
 }
 
 create_dbuser () {
+	echo "-- Creating SimEngine Database User --"
+	echo ""
 	sleep 4
 	echo "CALL dbms.changePassword('neo4j-simengine'); CALL dbms.security.createUser('simengine', 'simengine', false);"|cypher-shell -u neo4j -p neo4j
 	systemctl restart neo4j
+	sleep 4
+	echo ""
 }
 
 install_coredaemon () {
+	echo "-- Installing and Starting SimEngine Core Daemon --"
+	echo ""
 	cp /usr/share/simengine/services/simengine-core.service /etc/systemd/system/simengine-core.service
 	systemctl daemon-reload
 	systemctl enable simengine-core --now
+	echo ""
 }
 
 npm_installation () {
